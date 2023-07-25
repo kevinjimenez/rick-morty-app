@@ -4,7 +4,7 @@ import 'package:rick_morty_app/presentation/providers/characters_repository_prov
 
 const lastaPage = 42;
 
-final characterRickMortyProvider =
+final charactersRickMortyProvider =
     StateNotifierProvider<CharactersNotifier, List<CharacterEntity>>((ref) {
   final fetchCharacters = ref.watch(charactersRepositoryProvider).getCharacters;
   return CharactersNotifier(fetchCharacters: fetchCharacters);

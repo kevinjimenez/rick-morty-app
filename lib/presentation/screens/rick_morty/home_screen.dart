@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/characters_provider.dart';
 
@@ -24,11 +25,11 @@ class HomeViewState extends ConsumerState<_HomeView> {
   @override
   void initState() {
     super.initState();
-    ref.read(characterRickMortyProvider.notifier).loadNextPage();
+    ref.read(charactersRickMortyProvider.notifier).loadNextPage();
     scrollController.addListener(() {
       if (scrollController.position.pixels + 200 >=
           scrollController.position.maxScrollExtent) {
-        ref.read(characterRickMortyProvider.notifier).loadNextPage();
+        ref.read(charactersRickMortyProvider.notifier).loadNextPage();
       }
     });
   }
@@ -41,7 +42,7 @@ class HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final characters = ref.watch(characterRickMortyProvider);
+    final characters = ref.watch(charactersRickMortyProvider);
 
     return Scaffold(
       body: ListView.builder(
@@ -51,7 +52,7 @@ class HomeViewState extends ConsumerState<_HomeView> {
           final character = characters[index];
           return InkWell(
             onTap: () {
-              print('object');
+              context.push('/character/${character.id}');
             },
             child: ListTile(
               title: Text(character.name),
@@ -64,17 +65,17 @@ class HomeViewState extends ConsumerState<_HomeView> {
       bottomNavigationBar: BottomNavigationBar(items: const [
         BottomNavigationBarItem(
             icon: Icon(
-              Icons.abc,
+              Icons.person,
             ),
             label: ''),
         BottomNavigationBarItem(
             icon: Icon(
-              Icons.abc,
+              Icons.location_searching_outlined,
             ),
             label: ''),
         BottomNavigationBarItem(
             icon: Icon(
-              Icons.abc,
+              Icons.tv,
             ),
             label: ''),
       ]),
@@ -113,13 +114,13 @@ class _CharacterImage extends StatelessWidget {
 
 class _CharacterStatus extends StatelessWidget {
   const _CharacterStatus({
-    super.key,
     required this.character,
   });
 
   final CharacterEntity character;
 
   Color colorStatus(String status) {
+    //! usar enum
     switch (status) {
       case 'Alive':
         return Colors.green;
