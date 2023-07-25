@@ -10,10 +10,11 @@ class RickMortyDbDatasource extends RickMortyDatasource {
   ));
 
   @override
-  Future<List<CharacterEntity>> getCharacters() async {
+  Future<List<CharacterEntity>> getCharacters({int page = 1}) async {
     // final response =
     //     await dio.get('/character', queryParameters: {'page': page});
-    final response = await dio.get('/character');
+    final response =
+        await dio.get('/character', queryParameters: {'page': page});
     final charactersResponse = CharactersResponse.fromJson(response.data);
     final List<CharacterEntity> characters = charactersResponse.results
         .map(

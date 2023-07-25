@@ -8,7 +8,7 @@ class RickMortyRepositoryImpl extends RickMortyRepository {
   RickMortyRepositoryImpl(this.datasource);
 
   @override
-  Future<List<CharacterEntity>> getCharacters() {
-    return datasource.getCharacters();
+  Future<List<CharacterEntity>> getCharacters({int page = 1}) {
+    return datasource.getCharacters(page: page);
   }
 }
