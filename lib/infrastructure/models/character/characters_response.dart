@@ -24,7 +24,7 @@ class InfoResponse {
     final int count;
     final int pages;
     final String next;
-    final Stream? prev;
+    final String? prev;
 
     InfoResponse({
         required this.count,
