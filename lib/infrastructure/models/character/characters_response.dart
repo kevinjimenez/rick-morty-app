@@ -1,4 +1,4 @@
-import 'package:rick_morty_app/infrastructure/models/character_response.dart';
+import 'package:rick_morty_app/infrastructure/models/character/character_response.dart';
 
 class CharactersResponse {
     final InfoResponse info;
