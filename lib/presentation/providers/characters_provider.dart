@@ -8,15 +8,17 @@ final characterRickMortyProvider =
   return CharactersNotifier(fetchCharacters: fetchCharacters);
 });
 
-typedef CharactersCallback = Future<List<CharacterEntity>> Function();
+typedef CharactersCallback = Future<List<CharacterEntity>> Function({int page});
 
 class CharactersNotifier extends StateNotifier<List<CharacterEntity>> {
+  int currentPage = 0;
   final CharactersCallback fetchCharacters;
 
   CharactersNotifier({required this.fetchCharacters}) : super([]);
 
   Future<void> loadNextPage() async {
-    final List<CharacterEntity> characters = await fetchCharacters();
+    currentPage++;
+    final List<CharacterEntity> characters = await fetchCharacters(page: currentPage);
     state = [...state, ...characters];
   }
 }

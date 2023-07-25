@@ -19,10 +19,24 @@ class _HomeView extends ConsumerStatefulWidget {
 }
 
 class HomeViewState extends ConsumerState<_HomeView> {
+  final scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     ref.read(characterRickMortyProvider.notifier).loadNextPage();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels + 200 >=
+          scrollController.position.maxScrollExtent) {
+        ref.read(characterRickMortyProvider.notifier).loadNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,6 +45,7 @@ class HomeViewState extends ConsumerState<_HomeView> {
 
     return Scaffold(
       body: ListView.builder(
+        controller: scrollController,
         itemCount: characters.length,
         itemBuilder: (context, index) {
           final character = characters[index];
