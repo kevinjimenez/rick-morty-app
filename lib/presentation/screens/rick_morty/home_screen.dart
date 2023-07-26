@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rick_morty_app/config/helpers/change_status.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/characters_provider.dart';
 
@@ -119,19 +120,6 @@ class _CharacterStatus extends StatelessWidget {
 
   final CharacterEntity character;
 
-  Color colorStatus(String status) {
-    //! usar enum
-    switch (status) {
-      case 'Alive':
-        return Colors.green;
-
-      case 'Dead':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -142,7 +130,7 @@ class _CharacterStatus extends StatelessWidget {
             from: 15,
             child: Icon(
               Icons.circle,
-              color: colorStatus(character.status),
+              color: ChangeStatus.color(character.status),
               size: 15,
             ),
           ),

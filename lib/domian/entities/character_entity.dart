@@ -1,3 +1,5 @@
+import 'package:rick_morty_app/domian/entities/default_entity.dart';
+
 class CharacterEntity {
   final int id;
   final String name;
@@ -5,8 +7,8 @@ class CharacterEntity {
   final String species;
   final String type;
   final String gender;
-  // final CharacterLocationResponse origin;
-  // final CharacterLocationResponse location;
+  final DefaultEntity origin;
+  final DefaultEntity location;
   final String image;
   final List<String> episode;
   final String url;
@@ -19,6 +21,8 @@ class CharacterEntity {
     required this.species,
     required this.type,
     required this.gender,
+    required this.origin,
+    required this.location,
     required this.image,
     required this.episode,
     required this.url,

@@ -1,3 +1,5 @@
+import 'package:rick_morty_app/infrastructure/models/character/default_response.dart';
+
 class CharacterResponse {
     final int id;
     final String name;
@@ -5,8 +7,8 @@ class CharacterResponse {
     final String species;
     final String type;
     final String gender;
-    final CharacterLocationResponse origin;
-    final CharacterLocationResponse location;
+    final DefaultResponse origin;
+    final DefaultResponse location;
     final String image;
     final List<String> episode;
     final String url;
@@ -34,8 +36,8 @@ class CharacterResponse {
         species: json["species"]!,
         type: json["type"],
         gender: json["gender"]!,
-        origin: CharacterLocationResponse.fromJson(json["origin"]),
-        location: CharacterLocationResponse.fromJson(json["location"]),
+        origin: DefaultResponse.fromJson(json["origin"]),
+        location: DefaultResponse.fromJson(json["location"]),
         image: json["image"],
         episode: List<String>.from(json["episode"].map((x) => x)),
         url: json["url"],
@@ -55,25 +57,5 @@ class CharacterResponse {
         "episode": List<dynamic>.from(episode.map((x) => x)),
         "url": url,
         "created": created.toIso8601String(),
-    };
-}
-
-class CharacterLocationResponse {
-    final String name;
-    final String url;
-
-    CharacterLocationResponse({
-        required this.name,
-        required this.url,
-    });
-
-    factory CharacterLocationResponse.fromJson(Map<String, dynamic> json) => CharacterLocationResponse(
-        name: json["name"],
-        url: json["url"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "url": url,
     };
 }

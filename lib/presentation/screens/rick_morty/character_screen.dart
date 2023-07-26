@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rick_morty_app/config/helpers/change_status.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/character_provider.dart';
 
@@ -34,21 +35,36 @@ class CharacterScreenState extends ConsumerState<CharacterScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.characterId),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.favorite_border_rounded,
+                // size: 40,
+              ),
+              onPressed: () {},
+            )
+          ],
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _CharacterNameAndImage(character: character),
-              const SizedBox(
-                height: 30,
-              ),
-              _CharacterAbout(character: character),
-              const SizedBox(
-                height: 40,
-              ),
-              _CharacterEpisodes(character: character)
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _CharacterNameAndImage(character: character),
+                const SizedBox(
+                  height: 30,
+                ),
+                _CharacterAbout(character: character),
+                const SizedBox(
+                  height: 30,
+                ),
+                _CharacterEpisodes(character: character),
+                const SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -63,31 +79,34 @@ class _CharacterNameAndImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme;
     return Column(
       children: [
         Center(
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: FadeIn(child: Image.network(character.image)))),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Text(
-                    character.name,
-                    style: textStyle.titleLarge,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.favorite_border_rounded),
-                  onPressed: () {},
-                )
-              ]),
+                child: FadeIn(child: Image.network(character.image, height: 225,)))),
+        Text(
+          character.name,
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+        ),
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 5,
+          children: [
+            FadeIn(
+              child: Icon(
+                Icons.circle,
+                color: ChangeStatus.color(character.status),
+                size: 15,
+              ),
+            ),
+            Text(
+              character.status,
+              style: const TextStyle(fontSize: 15),
+            )
+          ],
         )
       ],
     );
@@ -106,13 +125,21 @@ class _CharacterAbout extends StatelessWidget {
       children: [
         const Text(
           'About the character',
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 25),
         ),
         _CharacterInfo(label: 'Gender', text: character.gender),
         _CharacterInfo(
           label: 'Species',
           text: character.species,
-        )
+        ),
+        _CharacterInfo(
+          label: 'Location',
+          text: character.location.name,
+        ),
+        _CharacterInfo(
+          label: 'Origin',
+          text: character.origin.name,
+        ),
       ],
     );
   }
@@ -128,16 +155,32 @@ class _CharacterInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ListTile(
+      dense: true,
+      // horizontalTitleGap: 0,
+      // minVerticalPadding: 0,
+      title: Text(
+        label,
+        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+      ),
+      subtitle: Text(
+        text,
+        style: const TextStyle(fontSize: 18),
+      ),
+    );
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 10, top: 5),
       child: Wrap(
         spacing: 10,
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.w500),
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
           ),
-          Text(text),
+          Text(
+            text,
+            style: const TextStyle(fontSize: 18),
+          ),
         ],
       ),
     );
@@ -151,6 +194,25 @@ class _CharacterEpisodes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Episodes list',
+          style: TextStyle(fontSize: 25),
+        ),
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.spaceBetween,
+          spacing: 20,
+          children: [
+            ...character.episode.map((episodie) => FilledButton.tonal(
+                  child: Text(episodie.split('/').last),
+                  onPressed: () {},
+                ))
+          ],
+        )
+      ],
+    );
   }
 }
