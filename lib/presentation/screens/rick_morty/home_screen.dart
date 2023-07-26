@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:rick_morty_app/config/helpers/change_status.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/characters_provider.dart';
+import 'package:rick_morty_app/presentation/providers/initial_loader_provider.dart';
+import 'package:rick_morty_app/presentation/widgets/shared/full_screen_loader.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -43,6 +45,8 @@ class HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
     final characters = ref.watch(charactersRickMortyProvider);
 
     return Scaffold(

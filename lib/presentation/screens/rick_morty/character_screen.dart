@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rick_morty_app/config/helpers/change_status.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/character_provider.dart';
@@ -28,8 +29,12 @@ class CharacterScreenState extends ConsumerState<CharacterScreen> {
     final character = ref.watch(characterRickMortyProvider)[widget.characterId];
 
     if (character == null) {
-      return const Center(
-        child: CircularProgressIndicator(strokeWidth: 2),
+      return Container(
+        width: double.infinity,
+        color: Colors.white,
+        child: const Center(
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
       );
     }
 
@@ -84,7 +89,11 @@ class _CharacterNameAndImage extends StatelessWidget {
         Center(
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: FadeIn(child: Image.network(character.image, height: 225,)))),
+                child: FadeIn(
+                    child: Image.network(
+                  character.image,
+                  height: 225,
+                )))),
         Text(
           character.name,
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
@@ -168,22 +177,6 @@ class _CharacterInfo extends StatelessWidget {
         style: const TextStyle(fontSize: 18),
       ),
     );
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, top: 5),
-      child: Wrap(
-        spacing: 10,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-          ),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -191,6 +184,25 @@ class _CharacterEpisodes extends StatelessWidget {
   final CharacterEntity character;
 
   const _CharacterEpisodes({required this.character});
+
+  void openDialogo(BuildContext context) {
+    showDialog(
+        barrierDismissible: false, // si da tocu duera del dialo no se cierra
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('seguro'),
+              content: const Text(
+                  'Veniam sint adipisicing pariatur reprehenderit in dolore dolore eiusmod voluptate ad non irure cupidatat culpa. Cupidatat commodo anim occaecat commodo dolor ea id mollit aute. Pariatur occaecat quis dolore aliqua officia id culpa ea magna eu ipsum. Nostrud pariatur sunt enim incididunt labore laboris esse. Ad in nostrud laborum reprehenderit do commodo ea ut dolor excepteur tempor amet. Aliqua reprehenderit do culpa ipsum dolor.'),
+              actions: [
+                TextButton(
+                    onPressed: () => context.pop(),
+                    child: const Text('Cancelar')),
+                FilledButton(
+                    onPressed: () => context.pop(),
+                    child: const Text('Aceptar'))
+              ],
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +220,9 @@ class _CharacterEpisodes extends StatelessWidget {
           children: [
             ...character.episode.map((episodie) => FilledButton.tonal(
                   child: Text(episodie.split('/').last),
-                  onPressed: () {},
+                  onPressed: () {
+                    openDialogo(context);
+                  },
                 ))
           ],
         )
