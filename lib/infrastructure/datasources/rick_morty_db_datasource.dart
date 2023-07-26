@@ -30,7 +30,7 @@ class RickMortyDbDatasource extends RickMortyDatasource {
   }
 
   @override
-  Future<CharacterEntity> getCharacter(String characterId) async {
+  Future<CharacterEntity> getCharacterById(String characterId) async {
     final response = await dio.get('/character/$characterId');
     final characterResponse = CharacterResponse.fromJson(response.data);
     final CharacterEntity character =
@@ -57,5 +57,14 @@ class RickMortyDbDatasource extends RickMortyDatasource {
         .map((episode) => EpisodeMapper.episodeResponsetoEntity(episode))
         .toList();
     return episodes;
+  }
+
+  @override
+  Future<EpisodeEntity> getEpisodeById(String episodeId) async {
+    final response = await dio.get('/episode/$episodeId');
+    final episodeResponse = EpisodeResponse.fromJson(response.data);
+    final EpisodeEntity episode =
+        EpisodeMapper.episodeResponsetoEntity(episodeResponse);
+    return episode;
   }
 }

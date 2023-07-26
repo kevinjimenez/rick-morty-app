@@ -15,8 +15,8 @@ class RickMortyRepositoryImpl extends RickMortyRepository {
   }
   
   @override
-  Future<CharacterEntity> getCharacter(String characterId) {
-    return datasource.getCharacter(characterId);
+  Future<CharacterEntity> getCharacterById(String characterId) {
+    return datasource.getCharacterById(characterId);
   }
 
   @override
@@ -27,5 +27,10 @@ class RickMortyRepositoryImpl extends RickMortyRepository {
   @override
   Future<List<EpisodeEntity>> getEpisodes({int page = 1}) {
     return datasource.getEpisodes(page: page);
+  }
+  
+  @override
+  Future<EpisodeEntity> getEpisodeById(String episodeId) {
+    return datasource.getEpisodeById(episodeId);
   }
 }

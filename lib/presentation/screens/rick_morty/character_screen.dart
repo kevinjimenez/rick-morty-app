@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:rick_morty_app/config/helpers/change_status.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/character_provider.dart';
+import 'package:rick_morty_app/presentation/providers/episodes_provider.dart';
 
 class CharacterScreen extends ConsumerStatefulWidget {
   final String characterId;
@@ -200,25 +201,6 @@ class _CharacterEpisodes extends StatelessWidget {
 
   const _CharacterEpisodes({required this.character});
 
-  void openDialogo(BuildContext context, String episode) {
-    showDialog(
-        barrierDismissible: false, // si da tocu duera del dialo no se cierra
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text('Episodio No $episode'),
-              content: const Text(
-                  'Veniam sint adipisicing pariatur reprehenderit in dolore dolore eiusmod voluptate ad non irure cupidatat culpa. Cupidatat commodo anim occaecat commodo dolor ea id mollit aute. Pariatur occaecat quis dolore aliqua officia id culpa ea magna eu ipsum. Nostrud pariatur sunt enim incididunt labore laboris esse. Ad in nostrud laborum reprehenderit do commodo ea ut dolor excepteur tempor amet. Aliqua reprehenderit do culpa ipsum dolor.'),
-              actions: [
-                TextButton(
-                    onPressed: () => context.pop(),
-                    child: const Text('Cancelar')),
-                FilledButton(
-                    onPressed: () => context.pop(),
-                    child: const Text('Aceptar'))
-              ],
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -238,17 +220,79 @@ class _CharacterEpisodes extends StatelessWidget {
             children: [
               ...character.episode.map((episodie) {
                 final no = episodie.split('/').last;
-                return FilledButton.tonal(
-                  child: Text(no),
-                  onPressed: () {
-                    openDialogo(context, no);
-                  },
-                );
+                // ref.read(episodeRickMortyProvider.notifier).loadById(no);
+                return _EpisodeView(no: no);
               })
             ],
           ),
         )
       ],
+    );
+  }
+}
+
+class _EpisodeView extends ConsumerWidget {
+  final String no;
+
+  const _EpisodeView({
+    required this.no,
+  });
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return FilledButton.tonal(
+      child: Text(no),
+      onPressed: () {
+        //! mejorar
+        showDialog(
+            barrierDismissible:
+                false, // si da tocu duera del dialo no se cierra
+            context: context,
+            builder: (
+              context,
+            ) {
+              return FutureBuilder(
+                  future:
+                      ref.read(episodeRickMortyProvider.notifier).loadById(no),
+                  builder: (context, snapshot) {
+                    final episode = ref.watch(episodeRickMortyProvider)[no];
+                    if (episode == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      );
+                    }
+                    return AlertDialog(
+                      title: Text('Episode No. ${episode.id}'),
+                      content: Wrap(
+                        spacing: 5,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Chip(label: Text(episode.episode)),
+                          Chip(label: Text(episode.name)),
+                          Chip(label: Text(episode.airDate)),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () => context.pop(),
+                            child: const Text('Cancelar')),
+                        FilledButton(
+                            onPressed: () => context.pop(),
+                            child: const Text('Aceptar'))
+                      ],
+                    );
+                  });
+            });
+        // print(a);
+        // if (a != null) {
+        //   CircularProgressIndicator(
+        //     strokeWidth: 2,
+        //   );
+        // }
+        // openDialogo(context, ref, no);
+      },
     );
   }
 }

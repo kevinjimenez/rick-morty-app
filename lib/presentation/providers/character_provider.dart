@@ -4,7 +4,7 @@ import 'package:rick_morty_app/presentation/providers/character_repository_provi
 
 final characterRickMortyProvider =
     StateNotifierProvider<CharacterNotifier, Map<String, CharacterEntity>>((ref) {
-  final fetchCharacter = ref.watch(characterRepositoryProvider).getCharacter;
+  final fetchCharacter = ref.watch(characterRepositoryProvider).getCharacterById;
   return CharacterNotifier(fetchCharacter: fetchCharacter);
 });
 
