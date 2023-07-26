@@ -136,18 +136,29 @@ class _CharacterAbout extends StatelessWidget {
           'About the character',
           style: TextStyle(fontSize: 25),
         ),
-        _CharacterInfo(label: 'Gender', text: character.gender),
+        _CharacterInfo(label: 'Gender', text: character.gender, onClick: null,),
         _CharacterInfo(
           label: 'Species',
           text: character.species,
+          onClick: null,
         ),
         _CharacterInfo(
           label: 'Location',
           text: character.location.name,
+          onClick: () {
+            print(character.location.url);
+            // Modal dull screen
+            // Navigator.of(context).push(CupertinoPageRoute(
+            //   fullscreenDialog: true,
+            //   builder: (context) => AaaScreen(),));
+          },
         ),
         _CharacterInfo(
           label: 'Origin',
           text: character.origin.name,
+          onClick: () {
+            print(character.origin.url);
+          },
         ),
       ],
     );
@@ -157,17 +168,14 @@ class _CharacterAbout extends StatelessWidget {
 class _CharacterInfo extends StatelessWidget {
   final String label;
   final String text;
-  const _CharacterInfo({
-    required this.text,
-    required this.label,
-  });
+  final void Function()? onClick;
+
+  const _CharacterInfo({required this.label, required this.text, required this.onClick});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
-      // horizontalTitleGap: 0,
-      // minVerticalPadding: 0,
       title: Text(
         label,
         style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
@@ -176,6 +184,7 @@ class _CharacterInfo extends StatelessWidget {
         text,
         style: const TextStyle(fontSize: 18),
       ),
+      onTap: onClick,
     );
   }
 }
@@ -185,12 +194,13 @@ class _CharacterEpisodes extends StatelessWidget {
 
   const _CharacterEpisodes({required this.character});
 
-  void openDialogo(BuildContext context) {
+  void openDialogo(BuildContext context, String episode) {
     showDialog(
         barrierDismissible: false, // si da tocu duera del dialo no se cierra
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text('seguro'),
+              title: Text('Episodio No $episode'),
+              
               content: const Text(
                   'Veniam sint adipisicing pariatur reprehenderit in dolore dolore eiusmod voluptate ad non irure cupidatat culpa. Cupidatat commodo anim occaecat commodo dolor ea id mollit aute. Pariatur occaecat quis dolore aliqua officia id culpa ea magna eu ipsum. Nostrud pariatur sunt enim incididunt labore laboris esse. Ad in nostrud laborum reprehenderit do commodo ea ut dolor excepteur tempor amet. Aliqua reprehenderit do culpa ipsum dolor.'),
               actions: [
@@ -213,18 +223,25 @@ class _CharacterEpisodes extends StatelessWidget {
           'Episodes list',
           style: TextStyle(fontSize: 25),
         ),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          spacing: 20,
-          children: [
-            ...character.episode.map((episodie) => FilledButton.tonal(
-                  child: Text(episodie.split('/').last),
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 5,
+            spacing: 30,
+            children: [
+              ...character.episode.map((episodie) {
+                final no = episodie.split('/').last;
+                return FilledButton.tonal(
+                  child: Text(no),
                   onPressed: () {
-                    openDialogo(context);
+                    openDialogo(context, no);
                   },
-                ))
-          ],
+                );
+              })
+            ],
+          ),
         )
       ],
     );

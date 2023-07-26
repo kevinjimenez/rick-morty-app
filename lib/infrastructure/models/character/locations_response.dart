@@ -1,17 +1,17 @@
-import 'package:rick_morty_app/infrastructure/models/character/character_response.dart';
+import 'package:rick_morty_app/infrastructure/models/character/location_response.dart';
 
-class CharactersResponse {
-    final CharactersInfoResponse info;
-    final List<CharacterResponse> results;
+class LocationsResponse {
+    final LocationsInfoResponse info;
+    final List<LocationResponse> results;
 
-    CharactersResponse({
+    LocationsResponse({
         required this.info,
         required this.results,
     });
 
-    factory CharactersResponse.fromJson(Map<String, dynamic> json) => CharactersResponse(
-        info: CharactersInfoResponse.fromJson(json["info"]),
-        results: List<CharacterResponse>.from(json["results"].map((x) => CharacterResponse.fromJson(x))),
+    factory LocationsResponse.fromJson(Map<String, dynamic> json) => LocationsResponse(
+        info: LocationsInfoResponse.fromJson(json["info"]),
+        results: List<LocationResponse>.from(json["results"].map((x) => LocationResponse.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -20,20 +20,20 @@ class CharactersResponse {
     };
 }
 
-class CharactersInfoResponse {
+class LocationsInfoResponse {
     final int count;
     final int pages;
     final String? next;
     final String? prev;
 
-    CharactersInfoResponse({
+    LocationsInfoResponse({
         required this.count,
         required this.pages,
         this.next,
         this.prev,
     });
 
-    factory CharactersInfoResponse.fromJson(Map<String, dynamic> json) => CharactersInfoResponse(
+    factory LocationsInfoResponse.fromJson(Map<String, dynamic> json) => LocationsInfoResponse(
         count: json["count"],
         pages: json["pages"],
         next: json["next"] ?? '',
