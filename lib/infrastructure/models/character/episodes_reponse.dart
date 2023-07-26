@@ -1,18 +1,18 @@
-import 'package:rick_morty_app/infrastructure/models/character/character_response.dart';
+import 'package:rick_morty_app/infrastructure/models/character/episode_reponse.dart';
 import 'package:rick_morty_app/infrastructure/models/character/info_response.dart';
 
-class CharactersResponse {
+class EpisodesResponse {
     final InfoResponse info;
-    final List<CharacterResponse> results;
+    final List<EpisodeResponse> results;
 
-    CharactersResponse({
+    EpisodesResponse({
         required this.info,
         required this.results,
     });
 
-    factory CharactersResponse.fromJson(Map<String, dynamic> json) => CharactersResponse(
+    factory EpisodesResponse.fromJson(Map<String, dynamic> json) => EpisodesResponse(
         info: InfoResponse.fromJson(json["info"]),
-        results: List<CharacterResponse>.from(json["results"].map((x) => CharacterResponse.fromJson(x))),
+        results: List<EpisodeResponse>.from(json["results"].map((x) => EpisodeResponse.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {

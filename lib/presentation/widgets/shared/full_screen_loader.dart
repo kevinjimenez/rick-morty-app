@@ -5,8 +5,9 @@ class FullScreenLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
-        color: Colors.white,
+        color: colors.primary,
         child: const Center(
           child: CircularProgressIndicator(
             strokeWidth: 2,

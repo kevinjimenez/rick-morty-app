@@ -6,6 +6,7 @@ import 'package:rick_morty_app/config/helpers/change_status.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:rick_morty_app/presentation/providers/characters_provider.dart';
 import 'package:rick_morty_app/presentation/providers/initial_loader_provider.dart';
+import 'package:rick_morty_app/presentation/providers/theme/theme_provider.dart';
 import 'package:rick_morty_app/presentation/widgets/shared/full_screen_loader.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -38,6 +39,7 @@ class HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
     final initialLoading = ref.watch(initialLoadingProvider);
     if (initialLoading) return const FullScreenLoader();
     final characters = ref.watch(charactersRickMortyProvider);
@@ -45,32 +47,50 @@ class HomeViewState extends ConsumerState<HomeView> {
     const gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200, crossAxisSpacing: 10, mainAxisSpacing: 10);
 
-    return GridView.builder(
-      controller: scrollController,
-      itemCount: characters.length,
-      gridDelegate: gridDelegate,
-      itemBuilder: (BuildContext context, int index) {
-        final character = characters[index];
-        return InkWell(
-          onTap: () {
-            context.push('/home/0/character/${character.id}');
-          },
-          child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _CharacterImage(character: character),
-                Text(
-                  character.name,
-                  style: const TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                _CharacterStatus(character: character),
-              ]),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Character list'),
+        leading: IconButton(
+          icon: const Icon(Icons.filter_alt_outlined),
+          onPressed: () {},
+        ),
+        actions: [
+          IconButton(
+              icon: Icon(isDarkMode
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined),
+              onPressed: () {
+                ref.read(themeNotifierProvider.notifier).toggleDarkmode();
+              })
+        ],
+      ),
+      body: GridView.builder(
+        controller: scrollController,
+        itemCount: characters.length,
+        gridDelegate: gridDelegate,
+        itemBuilder: (BuildContext context, int index) {
+          final character = characters[index];
+          return InkWell(
+            onTap: () {
+              context.push('/home/0/character/${character.id}');
+            },
+            child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _CharacterImage(character: character),
+                  Text(
+                    character.name,
+                    style: const TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  _CharacterStatus(character: character),
+                ]),
+          );
+        },
+      ),
     );
   }
 }

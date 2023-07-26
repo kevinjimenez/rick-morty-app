@@ -1,11 +1,15 @@
 import 'package:rick_morty_app/domian/datasources/rick_morty_datasource.dart';
 import 'package:rick_morty_app/domian/entities/character_entity.dart';
 import 'package:dio/dio.dart';
+import 'package:rick_morty_app/domian/entities/episode_entity.dart';
 import 'package:rick_morty_app/domian/entities/location_entity.dart';
 import 'package:rick_morty_app/infrastructure/mappers/character_mapper.dart';
+import 'package:rick_morty_app/infrastructure/mappers/episode_mapper.dart';
 import 'package:rick_morty_app/infrastructure/mappers/location_mapper.dart';
 import 'package:rick_morty_app/infrastructure/models/character/character_response.dart';
 import 'package:rick_morty_app/infrastructure/models/character/characters_response.dart';
+import 'package:rick_morty_app/infrastructure/models/character/episode_reponse.dart';
+import 'package:rick_morty_app/infrastructure/models/character/episodes_reponse.dart';
 import 'package:rick_morty_app/infrastructure/models/character/locations_response.dart';
 
 class RickMortyDbDatasource extends RickMortyDatasource {
@@ -43,5 +47,15 @@ class RickMortyDbDatasource extends RickMortyDatasource {
         .map((location) => LocationMapper.locationResponsetoEntity(location))
         .toList();
     return locations;
+  }
+
+  @override
+  Future<List<EpisodeEntity>> getEpisodes({int page = 1}) async {
+    final response = await dio.get('/episode', queryParameters: {'page': page});
+    final episodesResponse = EpisodesResponse.fromJson(response.data);
+    final List<EpisodeEntity> episodes = episodesResponse.results
+        .map((episode) => EpisodeMapper.episodeResponsetoEntity(episode))
+        .toList();
+    return episodes;
   }
 }

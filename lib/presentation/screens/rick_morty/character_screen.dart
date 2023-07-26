@@ -26,12 +26,13 @@ class CharacterScreenState extends ConsumerState<CharacterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final character = ref.watch(characterRickMortyProvider)[widget.characterId];
 
     if (character == null) {
       return Container(
         width: double.infinity,
-        color: Colors.white,
+        color: colors.primary,
         child: const Center(
           child: CircularProgressIndicator(strokeWidth: 2),
         ),
@@ -136,7 +137,11 @@ class _CharacterAbout extends StatelessWidget {
           'About the character',
           style: TextStyle(fontSize: 25),
         ),
-        _CharacterInfo(label: 'Gender', text: character.gender, onClick: null,),
+        _CharacterInfo(
+          label: 'Gender',
+          text: character.gender,
+          onClick: null,
+        ),
         _CharacterInfo(
           label: 'Species',
           text: character.species,
@@ -170,7 +175,8 @@ class _CharacterInfo extends StatelessWidget {
   final String text;
   final void Function()? onClick;
 
-  const _CharacterInfo({required this.label, required this.text, required this.onClick});
+  const _CharacterInfo(
+      {required this.label, required this.text, required this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +206,6 @@ class _CharacterEpisodes extends StatelessWidget {
         context: context,
         builder: (context) => AlertDialog(
               title: Text('Episodio No $episode'),
-              
               content: const Text(
                   'Veniam sint adipisicing pariatur reprehenderit in dolore dolore eiusmod voluptate ad non irure cupidatat culpa. Cupidatat commodo anim occaecat commodo dolor ea id mollit aute. Pariatur occaecat quis dolore aliqua officia id culpa ea magna eu ipsum. Nostrud pariatur sunt enim incididunt labore laboris esse. Ad in nostrud laborum reprehenderit do commodo ea ut dolor excepteur tempor amet. Aliqua reprehenderit do culpa ipsum dolor.'),
               actions: [
